@@ -13,6 +13,7 @@ from modules.user import user_bp
 from modules.home import home_bp
 from modules.device import device_bp
 from modules.admin import admin_bp
+from modules.api import api_bp
 
 load_dotenv()
 
@@ -31,6 +32,7 @@ with app.app_context():
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(device_bp, url_prefix='/device')
     app.register_blueprint(admin_bp, url_prefix='/admin')
+    app.register_blueprint(api_bp, url_prefix='/api')  # Register the API blueprint
 
 bcrypt = Bcrypt(app)
 

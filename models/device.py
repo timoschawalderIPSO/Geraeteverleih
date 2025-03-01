@@ -18,5 +18,15 @@ class Device(db.Model):
     user = db.relationship("User", backref='devices')
     user_id: Mapped[int] = Column(Integer, ForeignKey('user.id'))
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "device_name": self.device_name,
+            "device_type": self.device_type,
+            "description": self.description,
+            "is_available": self.is_available,
+            "user_id": self.user_id
+        }
+
 
 
