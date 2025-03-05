@@ -10,6 +10,7 @@ bcrypt = Bcrypt()
 
 api_bp = Blueprint('api', __name__)
 
+# Route zur Verarbeitung des Login-Requests
 @api_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -22,6 +23,7 @@ def login():
         return jsonify(access_token=access_token), 200
     return jsonify({"msg": "Invalid email or password"}), 401
 
+# Route zur Abfrage der Geräte (nur für authentifizierte Benutzer)
 @api_bp.route('/devices', methods=['GET'])
 @jwt_required()
 def get_devices():
@@ -33,6 +35,7 @@ def get_devices():
         devices = Device.query.filter_by(is_available=True).all()
     return jsonify([device.to_dict() for device in devices]), 200
 
+# Route zum Reservieren eines Geräts (nur für authentifizierte Benutzer)
 @api_bp.route('/devices/<int:device_id>/reserve', methods=['POST'])
 @jwt_required()
 def reserve_device(device_id):
@@ -46,6 +49,7 @@ def reserve_device(device_id):
         return jsonify({"msg": "Device reserved"}), 200
     return jsonify({"msg": "Device not available"}), 400
 
+# Route zum Freigeben eines reservierten Geräts (nur für authentifizierte Benutzer)
 @api_bp.route('/devices/<int:device_id>/unreserve', methods=['POST'])
 @jwt_required()
 def unreserve_device(device_id):

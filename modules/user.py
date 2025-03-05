@@ -12,12 +12,14 @@ bcrypt = Bcrypt()
 
 user_bp = Blueprint('user', __name__)
 
+# Route zur Anzeige des Login-Formulars
 @user_bp.route('/', methods=['GET'])
 @user_bp.route('/login', methods=['GET'])
 def login():
     user_login_form = UserLoginForm()
     return render_template('user/login.html', form=user_login_form)
 
+# Route zur Verarbeitung des Login-Formulars
 @user_bp.route('/login', methods=['POST'])
 def login_post():
     user_login_form = UserLoginForm()
@@ -32,17 +34,20 @@ def login_post():
         login_user(user, remember=user_login_form.remember_me.data)
         return redirect(url_for('home.index'))
       
+# Route zum Ausloggen des Benutzers
 @user_bp.route('/logout', methods=['GET'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('user.login'))
 
+# Route zur Anzeige des Registrierungs-Formulars
 @user_bp.route('/signup', methods=['GET'])
 def signup():
     user_signup_form = UserSignupForm()
     return render_template('user/signup.html', form=user_signup_form)
 
+# Route zur Verarbeitung des Registrierungs-Formulars
 @user_bp.route('/signup', methods=['POST'])
 def signup_post():
     user_signup_form = UserSignupForm()

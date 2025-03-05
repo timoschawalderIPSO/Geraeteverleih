@@ -7,35 +7,37 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   </head>
   <body>
+    <!-- Navigationsleiste -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light" id="navbar">
       <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('device.index') }}">Device Rental</a>
+        <a class="navbar-brand" href="{{ url_for('device.index') }}">Geräteverleih</a>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             {% if current_user.is_authenticated %}
               {% if current_user.role.name == 'Admin' %}
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('admin.list_users') }}">Admin</a>
+                <a class="nav-link" href="{{ url_for('admin.list_users') }}">Admin-Console</a>
               </li>
               {% endif %}
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('user.logout') }}">Logout</a>
+                <a class="nav-link" href="{{ url_for('user.logout') }}">Abmelden</a>
               </li>
             {% else %}
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('user.signup') }}">Signup</a>
+                <a class="nav-link" href="{{ url_for('user.signup') }}">Registrieren</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('user.login') }}">Login</a>
+                <a class="nav-link" href="{{ url_for('user.login') }}">Anmelden</a>
               </li>
             {% endif %}
+            <!-- Dropdown-Menü für das Theme -->
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="themeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Theme
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
-                <li><a class="dropdown-item" href="#" onclick="setTheme('light')">Light</a></li>
-                <li><a class="dropdown-item" href="#" onclick="setTheme('dark')">Dark</a></li>
+                <li><a class="dropdown-item" href="#" onclick="setTheme('light')">Hell</a></li>
+                <li><a class="dropdown-item" href="#" onclick="setTheme('dark')">Dunkel</a></li>
                 <li><a class="dropdown-item" href="#" onclick="setTheme('auto')">System</a></li>
               </ul>
             </li>
@@ -47,6 +49,7 @@
       {% block content %} {% endblock %}
     </div>
     <script>
+      // Funktion zum Setzen des Themes
       const setTheme = (theme) => {
         if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
           document.documentElement.setAttribute('data-bs-theme', 'dark')
@@ -64,6 +67,7 @@
         localStorage.setItem('theme', theme)
       }
 
+      // Initialisierung des Themes
       (() => {
         'use strict'
 

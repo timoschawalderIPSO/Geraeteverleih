@@ -7,19 +7,20 @@ from db.db import db
 
 device_bp = Blueprint('device', __name__)
 
+# Route zur Anzeige der Geräteübersicht
 @device_bp.route('/', methods=['GET'])
 @device_bp.route('/index', methods=['GET'])
 @login_required
 def index():
-    if current_user.role.name in ['Teacher', 'Admin']:
-        devices = Device.query.all()
-    else:
-        devices = Device.query.filter_by(is_available=True).all()
+    devices = Device.query.all()
     return render_template('index.html', devices=devices)
 
+# Route zum Hinzufügen eines neuen Geräts (nur für Admins)
 @device_bp.route('/add', methods=['GET', 'POST'])
 @login_required
 def add():
+    if current_user.role.name != 'Admin':
+        return redirect(url_for('device.index'))
     form = DeviceForm()
     if form.validate_on_submit():
         new_device = Device(
@@ -33,6 +34,7 @@ def add():
         return redirect(url_for('device.index'))
     return render_template('device/add.html', form=form)
 
+# Route zum Bearbeiten eines Geräts
 @device_bp.route('/edit/<int:device_id>', methods=['GET', 'POST'])
 @login_required
 def edit(device_id):
@@ -44,6 +46,7 @@ def edit(device_id):
         return redirect(url_for('device.index'))
     return render_template('device/edit.html', form=form, device=device)
 
+# Route zum Löschen eines Geräts
 @device_bp.route('/delete/<int:device_id>', methods=['POST'])
 @login_required
 def delete(device_id):
@@ -52,6 +55,7 @@ def delete(device_id):
     db.session.commit()
     return redirect(url_for('device.index'))
 
+# Route zum Reservieren eines Geräts
 @device_bp.route('/reserve/<int:device_id>', methods=['POST'])
 @login_required
 def reserve(device_id):
@@ -62,11 +66,12 @@ def reserve(device_id):
         db.session.commit()
     return redirect(url_for('device.index'))
 
+# Route zum Freigeben eines reservierten Geräts
 @device_bp.route('/unreserve/<int:device_id>', methods=['POST'])
 @login_required
 def unreserve(device_id):
     device = Device.query.get_or_404(device_id)
-    if current_user.role in [Role.Teacher, Role.Admin] and not device.is_available:
+    if (current_user.role.name in ['Teacher', 'Admin'] or device.user_id == current_user.id) and not device.is_available:
         device.is_available = True
         device.user_id = None
         db.session.commit()

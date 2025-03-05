@@ -3,8 +3,7 @@ from db.db import db
 from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped
 
-
-
+# Definition des Gerätemodells
 @dataclass
 class Device(db.Model):
     __tablename__ = "device"

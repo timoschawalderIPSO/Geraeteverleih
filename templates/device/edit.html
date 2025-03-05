@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}
-Edit Device
+Gerät bearbeiten
 {% endblock %}
 
 {% block content %}
-<h1>Edit Device</h1>
+<h1>Gerät bearbeiten</h1>
 <form method="post" action="{{ url_for('device.edit', device_id=device.id) }}">
     {{ form.hidden_tag() }}
     <div class="form-group">
@@ -20,6 +20,6 @@ Edit Device
     <div class="form-group form-check">
         {{ form.is_available }} {{ form.is_available.label(class="form-check-label") }}
     </div>
-    <button type="submit" class="btn btn-primary">Update Device</button>
+    <button type="submit" class="btn btn-primary">Gerät aktualisieren</button>
 </form>
 {% endblock %}

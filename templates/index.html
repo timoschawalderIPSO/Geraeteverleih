@@ -5,19 +5,21 @@ Index
 {% endblock %}
 
 {% block content %}
+{% if current_user.role.name == 'Admin' %}
+<a href="{{ url_for('device.add') }}" class="btn btn-primary mb-3">Gerät hinzufügen</a>
+{% endif %}
 {% if devices|length == 0 %}
-<h1>There are no Devices!</h1>
+<h1>Es sind keine Geräte verfügbar!</h1>
 {% else %}
-<a href="{{ url_for('device.add') }}" class="btn btn-primary mb-3">Add Device</a>
 <table class="table">
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Device</th>
-            <th scope="col">Type</th>
+            <th scope="col">Gerät</th>
+            <th scope="col">Typ</th>
             <th scope="col">Beschreibung</th>
-            <th scope="col">Verfuegbarkeit</th>
-            <th scope="col">Actions</th>
+            <th scope="col">Verfügbarkeit</th>
+            <th scope="col">Aktionen</th>
         </tr>
     </thead>
     <tbody>
@@ -27,21 +29,27 @@ Index
             <td>{{ device.device_name }}</td>
             <td>{{ device.device_type }}</td>
             <td>{{ device.description }}</td>
-            <td>{{ device.is_available }}</td>
+            <td>
+                {% if device.is_available %}
+                    Verfügbar
+                {% else %}
+                    Reserviert
+                {% endif %}
+            </td>
             <td>
                 {% if current_user.role.name in ['Teacher', 'Admin'] %}
-                <a href="{{ url_for('device.edit', device_id=device.id) }}" class="btn btn-warning">Edit</a>
-                <form action="{{ url_for('device.delete', device_id=device.id) }}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this device?');">
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                <a href="{{ url_for('device.edit', device_id=device.id) }}" class="btn btn-warning">Bearbeiten</a>
+                <form action="{{ url_for('device.delete', device_id=device.id) }}" method="post" style="display:inline;" onsubmit="return confirm('Bist du sicher, dass du dieses Gerät löschen möchtest?');">
+                    <button type="submit" class="btn btn-danger">Löschen</button>
                 </form>
                 {% endif %}
                 {% if device.is_available %}
                 <form action="{{ url_for('device.reserve', device_id=device.id) }}" method="post" style="display:inline;">
-                    <button type="submit" class="btn btn-success">Reserve</button>
+                    <button type="submit" class="btn btn-success">Reservieren</button>
                 </form>
-                {% elif current_user.role.name in ['Teacher', 'Admin'] %}
+                {% elif current_user.role.name in ['Teacher', 'Admin'] or device.user_id == current_user.id %}
                 <form action="{{ url_for('device.unreserve', device_id=device.id) }}" method="post" style="display:inline;">
-                    <button type="submit" class="btn btn-secondary">Unreserve</button>
+                    <button type="submit" class="btn btn-secondary">Freigeben</button>
                 </form>
                 {% endif %}
             </td>

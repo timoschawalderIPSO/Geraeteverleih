@@ -1,25 +1,30 @@
 {% extends "base.html" %}
 
 {% block title %}
-Add Device
+Gerät hinzufügen
 {% endblock %}
 
 {% block content %}
-<h1>Add a New Device</h1>
+<h1>Neues Gerät hinzufügen</h1>
 <form method="post" action="{{ url_for('device.add') }}">
     {{ form.hidden_tag() }}
+    <!-- Eingabefeld für den Gerätenamen -->
     <div class="form-group">
         {{ form.device_name.label }} {{ form.device_name(class="form-control") }}
     </div>
+    <!-- Eingabefeld für den Gerätetyp -->
     <div class="form-group">
         {{ form.device_type.label }} {{ form.device_type(class="form-control") }}
     </div>
+    <!-- Eingabefeld für die Beschreibung -->
     <div class="form-group">
         {{ form.description.label }} {{ form.description(class="form-control") }}
     </div>
+    <!-- Checkbox für die Verfügbarkeit -->
     <div class="form-group form-check">
         {{ form.is_available }} {{ form.is_available.label(class="form-check-label") }}
     </div>
-    <button type="submit" class="btn btn-primary">Add Device</button>
+    <!-- Schaltfläche zum Hinzufügen des Geräts -->
+    <button type="submit" class="btn btn-primary">Gerät hinzufügen</button>
 </form>
 {% endblock %}

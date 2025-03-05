@@ -5,11 +5,13 @@ from sqlalchemy.orm import Mapped
 from flask_login import UserMixin
 from db.db import db
 
+# Definition der Rollen
 class Role(enum.Enum):
     Admin = 1
     Teacher = 2
     Student = 3
 
+# Definition des Benutzermodells
 @dataclass
 class User(db.Model, UserMixin):
     __tablename__ = "user"
@@ -22,4 +24,4 @@ class User(db.Model, UserMixin):
 
     role: Mapped[Enum] = Column(Enum(Role))
 
-    
+
